@@ -1,6 +1,26 @@
 # react-ssr
 react服务端渲染
 
+
+### 客户端渲染与服务端渲染
+客户端渲染即普通的React项目渲染方式。
+客户端渲染流程：
+1. 浏览器发送请求
+2. 服务器返回HTML
+3. 浏览器发送bundle.js请求
+4. 服务器返回bundle.js
+5. 浏览器执行bundle.js中的React代码
+
+CSR带来的问题：
+1. 首屏加载时间过长
+2. SEO 不友好
+
+因为时间在往返的几次网络请求中就耽搁了，而且因为CSR返回到页面的HTML中没有内容，就只有一个root空元素，页面内容是靠js渲染出来的，爬虫在读取网页时就抓不到信息，所以SEO不友好
+
+SSR带来的问题：
+1. React代码在服务器端执行，很大的消耗了服务器的性能
+
+
 ## 项目的配置
 
  - babel-core      
@@ -29,3 +49,58 @@ react服务端渲染
 
 使用npm-run-all 简化操作
 全局安装npm-run-all
+
+
+### 什么是同构？
+一套React代码，在服务器端执行一次，在客户端再执行一次
+
+因为服务端渲染代码时使用的renderToString方法只会将DOM渲染上去，而不会将事件绑定上去，解决办法是让这套React代码在浏览器端再执行一次，这就是同构
+
+
+### 如何让浏览器执行JS代码哪？
+再返回的html字符串中加入"<script src='/index.js'></script>", 浏览器获取HTML后就会获取这个index.js
+
+而可以使用express方便的为浏览器提供静态资源。
+```js
+只要express发现请求了一个静态资源文件，那么express就会帮你去‘/public’下找
+app.use(express.static('public'))
+```
+
+
+### 如何让让React代码在客户端再执行一次？
+在src下创建client目录，用于存放想要客户端执行的代码，但是客户端并不认识我们写的import啥的，所以就需要webpack对客户端代码进行编译。配置webpack.client.js 描述编译规则，再在package.json中将编译命令添加在dev命令下。
+
+
+### 工程代码优化整理
+提取webpack文件中相同的部分，再使用webapck-merge合并webpack的配置项
+安装webpack-merge插件
+
+
+### React 同构时页面加载流程
+1. 浏览器第一次加载页面
+2. 服务端运行React代码渲染出无交互的HTML
+3. 浏览器接收到内容展示
+4. 浏览器加载JS文件
+5. JS中React代码在浏览器中重新执行
+6. React代码接管页面操作
+
+注意：
+服务器端渲染只管第一次进入页面时的路由，而不是每一次路由调转都需要服务器来做一次渲染
+
+
+### SSR中路由
+添加Routes.js，管理路由
+在client/index.js中使用 BroswerRouter，
+在server/index.js中使用 StaticRouter。
+在使用StaticRouter时还需为组件传递路由，不然后端的这个Router不知道到底路由是什么
+
+
+### 中间层
+![midLayer](img/midLayer.png)
+
+node Server 作为中间层负责处理渲染页面相关的内容，它只是一个中间层，只负责展示页面
+
+Java Server 来做复杂的计算和数据库的查询工作
+
+
+### SSR中异步加载的内容
