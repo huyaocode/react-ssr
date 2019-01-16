@@ -19,9 +19,17 @@ class Home extends Component {
       </div>
     )
   }
+  //componentDidMount在服务器端不执行
   componentDidMount() {
-    this.props.getHomeList()
+    if(!this.props.list.length) {
+      this.props.getHomeList()
+    }
   }
+}
+
+Home.loadData = (store) => {
+  //这个函数，负责在服务器端渲染之前，把这个路由需要的数据加载好
+  return store.dispatch(getHomeList())
 }
 
 const mapStateToProps = state => ({
