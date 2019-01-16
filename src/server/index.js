@@ -1,15 +1,24 @@
 import express from 'express'
-
+import proxy from 'express-http-proxy'
 import { matchRoutes } from 'react-router-config'
-
 import routes from '../Routes'
-
 import { render } from './utils'
 import { getStore } from '../store'
 
 //因为webpack支持ES Module，所以可以改写为import这种形式，但是编译完成后还是使用的require()这种语法
 const app = express()
 //只要express发现请求了一个静态资源文件，那么express就会帮你去‘/public’下找
+
+//接口代理转发
+app.use(
+  '/api',
+  proxy('http://localhost:8520', {
+    proxyReqPathResolver: function( req ) {
+      return '/assert' + req.url;
+    }
+  })
+)
+
 app.use(express.static('public'))
 
 app.get('*', function(req, res) {

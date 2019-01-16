@@ -1,7 +1,6 @@
 # react-ssr
 react服务端渲染
 
-
 ### 客户端渲染与服务端渲染
 客户端渲染即普通的React项目渲染方式。
 客户端渲染流程：
@@ -142,4 +141,24 @@ componentDidMount只会在客户端执行，在服务端不会执行。这样的
 5. 服务端使用renderToString方法将React组件转换成字符串
 6. 客户端收到服务端返回的页面，此时的html部分里已经有了这个页面所有的内容
 7. 客户端把保存在window中的state拿来初始化store，让客户端拥有和后台初始时一样的store
-8. 客户端执行componetDidMount生命周期函数，
+
+
+
+### 让node代码变为中间层 - 请求的代理转发
+让Nodejs变为中间层，那就要让客户端发送的所有请求都只与node中间层打交道。
+在nodejs端 使用express-http-proxy将请求转发到后端，但是在异步获取数据时会出现一个问题
+
+比如一个请求 'api/news.json'
+
+浏览器运行
+'api/news.json' = localhost:3000/api/news.json
+
+服务器运行
+'api/news.json' = 服务器根目录下/api/news.json
+
+解决方法：
+判断到底是哪里执行的ajax请求，然后访问不同的url
+
+
+### axios-instances来做路由前缀配置
+分别为客户端和服务端配置一个请求地址前缀（baseURL属性），使用这个instance来发送请求，就可以提高代码的维护性
