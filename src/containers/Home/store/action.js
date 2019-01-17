@@ -1,4 +1,4 @@
-import { CHANGE_LIST } from './constants'
+import { CHANGE_LIST } from './actionType'
 const changeList = list => ({
   type: CHANGE_LIST,
   list

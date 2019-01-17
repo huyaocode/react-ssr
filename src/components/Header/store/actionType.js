@@ -1,0 +1,1 @@
+export const CHANGE_LOGIN_STATUS = 'header/CHANGE_LOGIN_STATUS'

@@ -22,7 +22,7 @@ app.use(
 app.use(express.static('public'))
 
 app.get('*', function(req, res) {
-  const store = getStore()
+  const store = getStore(req)
   //在这里能拿到异步数据，并填充到store中，就可以做到SSR异步请求的渲染
   // store中填充的内容还需要结合当前用户请求地址和路由做判断
   // 如果用户访问 / 路径，我们就拿home组件的异步数据
