@@ -12,9 +12,9 @@ const app = express()
 //接口代理转发
 app.use(
   '/api',
-  proxy('http://localhost:8520', {
+  proxy('http://localhost:8899', {
     proxyReqPathResolver: function( req ) {
-      return '/assert' + req.url;
+      return '/api' + req.url;
     }
   })
 )

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8520/assert'
+  baseURL: 'http://localhost:8899'
 });
 
 export default instance;
