@@ -161,4 +161,22 @@ componentDidMount只会在客户端执行，在服务端不会执行。这样的
 
 
 ### axios-instances来做路由前缀配置
-分别为客户端和服务端配置一个请求地址前缀（baseURL属性），使用这个instance来发送请求，就可以提高代码的维护性
+分别为客户端和服务端配置一个请求地址前缀（baseURL属性），使用这个instance来发送请求，就可以提高代码的维护性 
+
+
+### 多级路由
+比如我们需要很多页面共享header组件，那么就可以使用多级路由来做，而不是每一个组件都去引用这个组件。
+使用方法：
+1. 将路由改写为多级嵌套的形式
+2. 使用 renderRoutes(routes) 在根组件中渲染路由
+在App.js中接收props然后渲染匹配到的子路由
+```js
+const App = (props) => {
+  return (
+    <div>
+      <Header />
+      { renderRoutes(props.route.routes) }
+    </div>
+  )
+}
+```

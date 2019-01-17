@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter} from 'react-router-dom'
 import { Provider } from 'react-redux'
+import { renderRoutes } from 'react-router-config'
 import routes from '../Routes'
 import { getClientStore } from '../store'
 
@@ -10,11 +11,9 @@ const store = getClientStore();
 const App = () => (
   <Provider store={store}>
     <BrowserRouter>
-      <Switch>
-        {routes.map(route => (
-          <Route key={route.path} {...route} />
-        ))}
-      </Switch>
+      <div>
+      {renderRoutes(routes)}
+      </div>
     </BrowserRouter>
   </Provider>
 )
