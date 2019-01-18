@@ -50,6 +50,16 @@ SSR带来的问题：
 全局安装npm-run-all
 
 
+
+### CSS 样式修饰
+配置loader，引入`isomorphic-style-loader`来做服务器端样式的加载，但是isomorphic不会在返回的html的head标签中直接注入样式，只会在标签上留下变量名。
+实现方法：
+1. 在组件的`compoentWillMount`时将`styles._getCss()`保存到context.css中，
+2. 在服务端返回页面前，获取context.css并把他写入返回的字符串中就可以实现
+3. 使用高阶组件可以简化操作，不需要每个组件都在compoentWillMount中获取样式
+
+
+
 ### 什么是同构？
 一套React代码，在服务器端执行一次，在客户端再执行一次
 

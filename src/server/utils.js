@@ -8,17 +8,18 @@ export const render = (store, routes, req, context) => {
   const content = renderToString(
     <Provider store={store}>
       <StaticRouter location={req.path} context={context}>
-        <div>
-          {renderRoutes(routes)}
-        </div>
+        <div>{renderRoutes(routes)}</div>
       </StaticRouter>
     </Provider>
   )
 
-    return `
+  const cssStr = context.css.length ? context.css.join('\n') : '';
+
+  return `
       <html>
         <head>
           <title>SSR</title>
+          <style>${cssStr}</style>
         </head>
         <body>
           <div id="root">${content}</div>

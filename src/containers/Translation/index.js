@@ -2,32 +2,35 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { getTranslationList } from './stroe/actions'
+import styles from './style.css'
+import withStyle from '../../withStyle'
 
 class Translation extends Component {
   translationList() {
     const { list } = this.props
-    return <ul>{list.map(item => <li key={item.id}>{item.title}</li>)}</ul>
+    return (
+      <ul>
+        {list.map(item => (
+          <li key={item.id}>{item.title}</li>
+        ))}
+      </ul>
+    )
   }
   render() {
-    return this.props.login ? 
-    (
-      <div>
+    return this.props.login ? (
+      <div className={styles.test}>
         <div>Translation</div>
         {this.translationList()}
       </div>
+    ) : (
+      <Redirect to="/" />
     )
-    :
-    <Redirect to="/" />
   }
   componentDidMount() {
-    if(!this.props.list.length){
-      this.props.getTranslationList();
+    if (!this.props.list.length) {
+      this.props.getTranslationList()
     }
   }
-}
-
-Translation.loadData = store => {
-  return store.dispatch(getTranslationList())
 }
 
 const mapStateToProps = state => ({
@@ -41,7 +44,13 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(
+const ExportTranslation = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Translation)
+)(withStyle(Translation, styles))
+
+ExportTranslation.loadData = store => {
+  return store.dispatch(getTranslationList())
+}
+
+export default ExportTranslation

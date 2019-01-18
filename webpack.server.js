@@ -12,7 +12,22 @@ const serverConfig = {
     path: path.resolve(__dirname, 'build')
   },
   //在node代码中require一些node-modules时，他不会将代码打包到文件中，而只是保持对node-modules的引用
-  externals: [nodeExternals()]
+  externals: [nodeExternals()],
+  module: {
+    rules: [
+      {
+        test: /\.css?$/,
+        use: ['isomorphic-style-loader',{
+          loader: 'css-loader',
+          options: {
+            importLoaders: 1,
+            modules: true,
+            localIdentName: '[name]_[local]_[hash:base64:5]'
+          }
+        }]
+      }
+    ]
+  }
 };
 
 

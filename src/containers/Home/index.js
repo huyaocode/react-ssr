@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getHomeList } from './store/action'
+import styles from './style.css'
+import withStyle from '../../withStyle'
 
 class Home extends Component {
-  
+
   getList() {
     const { list } = this.props
     return list.map(item => <div key={item.id}>{item.title}</div>)
@@ -11,7 +13,7 @@ class Home extends Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.test}>
         {this.getList()}
         <button onClick={() => alert('click')}>click</button>
       </div>
@@ -25,11 +27,6 @@ class Home extends Component {
   }
 }
 
-Home.loadData = (store) => {
-  //这个函数，负责在服务器端渲染之前，把这个路由需要的数据加载好
-  return store.dispatch(getHomeList())
-}
-
 const mapStateToProps = state => ({
   list: state.home.newsList
 })
@@ -40,7 +37,14 @@ const mapDispathToProps = dispatch => ({
   }
 })
 
-export default connect(
+const ExportHome = connect(
   mapStateToProps,
   mapDispathToProps
-)(Home)
+)(withStyle(Home, styles))
+
+ExportHome.loadData = (store) => {
+  //这个函数，负责在服务器端渲染之前，把这个路由需要的数据加载好
+  return store.dispatch(getHomeList())
+}
+
+export default ExportHome
