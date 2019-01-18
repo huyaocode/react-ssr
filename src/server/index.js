@@ -22,6 +22,7 @@ app.use(
 app.use(express.static('public'))
 
 app.get('*', function(req, res) {
+
   const store = getStore(req)
   //在这里能拿到异步数据，并填充到store中，就可以做到SSR异步请求的渲染
   // store中填充的内容还需要结合当前用户请求地址和路由做判断
@@ -30,13 +31,15 @@ app.get('*', function(req, res) {
 
   // 根据路由的路径，来往store里面加数据
   const matchedRoutes = matchRoutes(routes, req.path)
+
   //让matchRoutes里面所有的组件，对应的loadData方法执行一次
   const promises = []
   matchedRoutes.forEach(item => {
-    if (item.route.loadData) {
-      const promise = new Promise((resolve, reject) => {
-        item.route.loadData(store).then(resolve).catch(resolve)
-      })
+    const { loadData } = item.route.loadData
+    if ( loadData ) {
+      const promise = new Promise((resolve) => {
+        loadData(store).then(resolve).catch(resolve);
+      });
       promises.push(promise);
     }
   })
@@ -44,17 +47,19 @@ app.get('*', function(req, res) {
   Promise.all(promises).then(() => {
     const context = {css:[]};
     const html = render(store, routes, req, context)
-    
+
     //重定向
-    if(context.action === 'REPLACE') {
+    if(context.action && context.action === 'REPLACE') {
       res.redirect(301, context.url)
     }
     // 404 页面设置状态码
     else if(context.NOT_FOUND) {
       res.status(404);
+      res.send(html)
     }
-    
-    res.send(html)
+    else {
+      res.send(html)
+    }
   })
 })
 

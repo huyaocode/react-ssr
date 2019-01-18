@@ -10,17 +10,15 @@ class Header extends Component {
   render() {
     const { isLogin, handleLogin, handleLogout } = this.props
     return (
-      <div className={styles.test}>
-        <Link to="/"> 首页 </Link>
-        <br />
+      <div className={styles.container}>
+        <Link to="/" className={styles.item}> 首页 </Link>
         {isLogin ? (
           <Fragment>
-            <Link to="/translation"> 翻译列表 </Link>
-            <br />
-            <button onClick={handleLogout}> 退出 </button>
+            <Link to="/translation"  className={styles.item}> 翻译列表 </Link>
+            <div onClick={handleLogout}  className={styles.item}> 退出 </div>
           </Fragment>
         ) : (
-          <button onClick={handleLogin}> 登陆 </button>
+          <div onClick={handleLogin} className={styles.item}> 登陆 </div>
         )}
       </div>
     )

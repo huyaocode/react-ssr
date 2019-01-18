@@ -1,7 +1,9 @@
-body {
-  background: #eee;
+.container {
+  margin-top: 20px;
+  margin-left: 20px;
 }
-
-.test {
-  background: red
+.item {
+  line-height: 34px;
+  font-size: 16px;
+  color: #888;
 }

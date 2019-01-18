@@ -8,20 +8,15 @@ import withStyle from '../../withStyle'
 class Translation extends Component {
   translationList() {
     const { list } = this.props
-    return (
-      <ul>
-        {list.map(item => (
-          <li key={item.id}>{item.title}</li>
-        ))}
-      </ul>
-    )
+    return list.map(item => (
+      <div className={styles.item} key={item.id}>
+        {item.title}
+      </div>
+    ))
   }
   render() {
     return this.props.login ? (
-      <div className={styles.test}>
-        <div>Translation</div>
-        {this.translationList()}
-      </div>
+      <div className={styles.container}>{this.translationList()}</div>
     ) : (
       <Redirect to="/" />
     )
