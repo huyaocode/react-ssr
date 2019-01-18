@@ -2,12 +2,14 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import {reducer as headerReducer} from '../components/Header/store';
 import {reducer as homeReducer} from '../containers/Home/store';
+import {reducer as translationReducer} from '../containers/Translation/stroe';
 import clientAxios from '../client/request'
 import serverAxios from '../server/request'
 
 const reducer = combineReducers({
   home: homeReducer,
-  header: headerReducer
+  header: headerReducer,
+  translation: translationReducer
 })
 
 //让每一个用户都有一个自己的store，而不是获取同一引用

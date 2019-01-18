@@ -13,7 +13,7 @@ const App = (props) => {
 }
 
 App.loadData = (store) => {
-  store.dispatch(actions.getIsLogin())
+  return store.dispatch(actions.getIsLogin())
 }
 
 export default App

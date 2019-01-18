@@ -10,8 +10,6 @@ export const getIsLogin = () => {
   return (dispatch, getState, axiosInstance) => {
     return axiosInstance.get('/api/isLogin').then(res => {
       dispatch(changeLoginState(res.data.data.login));
-    }).catch(err => {
-      console.error('err !!!!!!\n', err)
     })
   }
 }
@@ -23,8 +21,6 @@ export const login = () => {
       if(res.data.success) {
         dispatch(changeLoginState(true));
       }
-    }).catch(err => {
-      console.error('err !!!!!!\n', err)
     })
   }
 }
@@ -36,8 +32,6 @@ export const logout = () => {
       if(res.data.success) {
         dispatch(changeLoginState(false));
       }
-    }).catch(err => {
-      console.error('err !!!!!!\n', err)
     })
   }
 }

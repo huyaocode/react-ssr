@@ -57,14 +57,20 @@ app.get('/api/translationList', (req, res) => {
   let readData = data.data;
   if (readData.login) {
     let transitionInfo = readFile(transitionFile);
-    res.json(transitionInfo);
+    res.json({
+      success: true,
+      data: transitionInfo
+    });
   } else {
-    res.json(data);
+    res.json({
+      success: false,
+      data: { login: false }
+    });
   }
 });
 
 app.get('/', (req, res) => {
-  res.send('来啦老弟')
+  res.send('来啦~老弟!')
 })
 
 function readFile(fileName) {

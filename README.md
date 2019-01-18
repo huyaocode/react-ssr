@@ -196,3 +196,46 @@ const App = (props) => {
    1. 浏览器请求html (携带了cookie)
    2. NodeJS服务器进行服务端渲染
    3. 进行服务端渲染，首先要去api服务器获取数据(没有携带cookie)
+
+
+
+### context 实现404页面状态码为404
+
+`StaticRouter`组件可接收一个`context`对象，这个对象会传递到每一个组件的`this.props.staticContext`中。
+而当404页面组件加载时修改这个`staticContext`对象就可以让server/index.js知道这个页面的状态码为多少，从而设置状态码
+```html
+<StaticRouter location={req.path} context={context}>
+```
+
+
+### context 实现服务端的301重定向
+当页面重定向时，如果不再服务端配置，那么就会使得只有客户端重定向，而查看源代码就发现服务端提供的还是重定向前的页面的html
+当需要重定向时，StaticRouter会自动向context中添加一个对象，对象的格式如下：
+```js
+{
+  action: 'REPLACE',
+  url: '/',
+  location: {
+    pathname: '/',
+    search: '',
+    hash: '',
+    state: undefined
+  }
+}
+```
+这时我们就可以这样做：
+```js
+if(context.action === 'REPLACE') {
+  res.redirect(301, context.url)
+}
+```
+这个时候就做到了服务端重定向，返回的Html页面就直接是重定向后的页面了
+
+
+
+### 数据请求失败的情况下Promise的处理
+如果页面加载前需要获取几个api请求，但是这其中有一个Promise失败了这要如何处理哪？ 
+最好的办法是将能获取成功的数据都展示出来，获取失败的部分就算了，而不是展示一个报错页面。
+但使用Promise.all时如果一个请求失败了那么直接就会执行Promise.all().catch()方法了。如果其他的一些请求本来是可以成功加载的，但是因为它执行的比较慢则会被忽略掉。
+
+解决问题的方法是在这些promise外再包裹一个promise，不论数据加载成功与否，都执行包裹promise的resolve方法，这样就使得promise.all的等待都是正确的promise，只不过加载出错的promise对象中内容不是想要的而已。

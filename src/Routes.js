@@ -1,7 +1,8 @@
 // 配置路由
-import Home from './containers/Home'
-import Login from './containers/Login'
 import App from './App'
+import Home from './containers/Home'
+import Translation from './containers/Translation'
+import NotFound from './containers/NotFound'
 
 export default [
   {
@@ -16,9 +17,13 @@ export default [
         loadData: Home.loadData
       },
       {
-        path: '/login',
+        path: '/translation',
         exact: true,
-        component: Login
+        component: Translation,
+        loadData: Translation.loadData
+      },
+      {
+        component: NotFound
       }
     ]
   }
