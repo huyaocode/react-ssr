@@ -3,7 +3,9 @@ import proxy from 'express-http-proxy'
 import { matchRoutes } from 'react-router-config'
 import routes from '../Routes'
 import { render } from './utils'
-import { getStore } from '../store'
+import { getServerStore } from '../store'
+
+const PORT = 3000;
 
 //因为webpack支持ES Module，所以可以改写为import这种形式，但是编译完成后还是使用的require()这种语法
 const app = express()
@@ -23,7 +25,7 @@ app.use(express.static('public'))
 
 app.get('*', function(req, res) {
 
-  const store = getStore(req)
+  const store = getServerStore(req)
   //在这里能拿到异步数据，并填充到store中，就可以做到SSR异步请求的渲染
   // store中填充的内容还需要结合当前用户请求地址和路由做判断
   // 如果用户访问 / 路径，我们就拿home组件的异步数据
@@ -35,7 +37,7 @@ app.get('*', function(req, res) {
   //让matchRoutes里面所有的组件，对应的loadData方法执行一次
   const promises = []
   matchedRoutes.forEach(item => {
-    const { loadData } = item.route.loadData
+    const { loadData } = item.route
     if ( loadData ) {
       const promise = new Promise((resolve) => {
         loadData(store).then(resolve).catch(resolve);
@@ -45,9 +47,9 @@ app.get('*', function(req, res) {
   })
 
   Promise.all(promises).then(() => {
+    
     const context = {css:[]};
     const html = render(store, routes, req, context)
-
     //重定向
     if(context.action && context.action === 'REPLACE') {
       res.redirect(301, context.url)
@@ -63,4 +65,4 @@ app.get('*', function(req, res) {
   })
 })
 
-const server = app.listen(3000)
+const server = app.listen(PORT)

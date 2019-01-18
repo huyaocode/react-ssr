@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
+import Helmet from 'react-helmet'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { getTranslationList } from './stroe/actions'
@@ -16,7 +17,13 @@ class Translation extends Component {
   }
   render() {
     return this.props.login ? (
-      <div className={styles.container}>{this.translationList()}</div>
+      <Fragment>
+        <Helmet>
+          <title>Huyao的SSR翻译页面 - 丰富多彩的咨询</title>
+          <meta name="description" content="Huyao的SSR翻译页面 - 丰富多彩的咨询"/>
+        </Helmet>
+        <div className={styles.container}>{this.translationList()}</div>
+      </Fragment>
     ) : (
       <Redirect to="/" />
     )

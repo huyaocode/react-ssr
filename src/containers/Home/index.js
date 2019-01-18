@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
+import {Helmet} from 'react-helmet'
 import { connect } from 'react-redux'
 import { getHomeList } from './store/action'
 import styles from './style.css'
@@ -13,9 +14,15 @@ class Home extends Component {
 
   render() {
     return (
-      <div className={styles.container}>
-        {this.getList()}
-      </div>
+      <Fragment>
+        <Helmet>
+          <title>Huyao的SSR新闻页面 - 丰富多彩的咨询</title>
+          <meta name="description" content="Huyao的SSR新闻页面 - 丰富多彩的咨询"/>
+        </Helmet>
+        <div className={styles.container}>
+          {this.getList()}
+        </div>
+      </Fragment>
     )
   }
   //componentDidMount在服务器端不执行

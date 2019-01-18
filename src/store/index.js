@@ -13,7 +13,7 @@ const reducer = combineReducers({
 })
 
 //让每一个用户都有一个自己的store，而不是获取同一引用
-export const getStore = (req) => {
+export const getServerStore = (req) => {
   //改变服务端store的内容，一定要使用的 serverAxios
   return createStore(reducer, applyMiddleware(thunk.withExtraArgument(serverAxios(req))));
 }
