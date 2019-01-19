@@ -46,6 +46,17 @@ SEO(Search engin optimization) 搜索引擎优化。指通过一些手段，让�
 4. 定制好title和meta description也可以提高排名。
 
 
+### 预渲染
+预渲染就是把一个普通的客户端项目渲染好了之后，将渲染出的html内容返回给爬虫，从而做到搜索引擎优化。
+
+预渲染架构：
+在项目的最外层加一台nginx服务器，当用户或网络爬虫访问时，nginx通过UserAgent或IP的一些信息，识别出访问者到底是用户还是网络爬虫。如果是网络爬虫，那么就会把请求转发到预渲染服务器，预渲染把渲染好的HTML返回给爬虫；如果是用户，那就直接转发到React服务器。
+这种做法是很经济有效的。
+![预渲染架构](img/prerender.png)
+
+prerender原理：
+当访问prerender开启的服务时，这个prerender服务器会生成一个小的浏览器，然后用这个浏览器去访问目标地址，浏览器渲染好了之后就可以查看DOM元素，就可以把渲染好的html返回给爬虫。
+
 ## 项目的配置
 
  - babel-core      
@@ -287,3 +298,5 @@ if(context.action === 'REPLACE') {
   ${helmet.title.toString()}  //title标签
   ${helmet.meta.toString()}   // meta标签
 ```
+
+
