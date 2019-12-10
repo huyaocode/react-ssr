@@ -7,7 +7,7 @@
 .item {
   display: inline-block;
   line-height: 22px;
-  color: #333;
+  color: rgb(0, 200, 120);
   text-decoration: none;
   margin: 0 20px;
   font-size: 16px;
@@ -15,5 +15,5 @@
 }
 
 .item:hover {
-  color: #999;
+  color: rgb(100, 200, 100);
 }
